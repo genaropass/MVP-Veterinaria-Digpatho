@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "@types/openseadragon": "^5.0.1"
+  }
+}

@@ -1,0 +1,16 @@
+[Unit]
+Description=Uvicorn Preproduccion Digpatho Backend
+After=network.target
+
+[Service]
+Type=simple
+User=__DEPLOY_USER__
+WorkingDirectory=/home/__DEPLOY_USER__/backend_prepro
+EnvironmentFile=-/home/__DEPLOY_USER__/.env_preprod
+ExecStartPre=/bin/mkdir -p /home/__DEPLOY_USER__/backend_prepro/logs
+ExecStart=/home/__DEPLOY_USER__/backend_prepro/venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8001
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

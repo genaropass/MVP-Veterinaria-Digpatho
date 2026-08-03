@@ -1,0 +1,108 @@
+{
+    "create_informe": [
+        {
+            "section": "HTTP status",
+            "status": "ok",
+            "detail": "status=200"
+        },
+        {
+            "section": "Response match",
+            "status": "ok",
+            "detail": {
+                "fecha_de_muestra": "23-02-1990",
+                "paciente_id": "810a7ade-5f7e-4e7d-abca-8bd474bf92e2",
+                "tipo_estudio": "ki67"
+            }
+        }
+    ],
+    "list_informes": [
+        {
+            "section": "HTTP status",
+            "status": "ok",
+            "detail": ""
+        },
+        {
+            "section": "List match",
+            "status": "ok",
+            "detail": [
+                {
+                    "fecha_de_muestra": "23-02-1990",
+                    "paciente_id": "810a7ade-5f7e-4e7d-abca-8bd474bf92e2",
+                    "tipo_estudio": "ki67"
+                },
+                {
+                    "fecha_de_muestra": "23-02-1990",
+                    "paciente_id": "810a7ade-5f7e-4e7d-abca-8bd474bf92e2",
+                    "tipo_estudio": "ki67"
+                }
+            ]
+        }
+    ],
+    "get_informe_id": [
+        {
+            "section": "HTTP status",
+            "status": "ok",
+            "detail": ""
+        },
+        {
+            "section": "Response match",
+            "status": "ok",
+            "detail": {
+                "fecha_de_muestra": "23-02-1990",
+                "paciente_id": "810a7ade-5f7e-4e7d-abca-8bd474bf92e2",
+                "tipo_estudio": "ki67"
+            }
+        }
+    ],
+    "list_informes_por_paciente": [
+        {
+            "section": "HTTP status",
+            "status": "ok",
+            "detail": ""
+        },
+        {
+            "section": "List match",
+            "status": "ok",
+            "detail": [
+                {
+                    "fecha_de_muestra": "23-02-1990",
+                    "paciente_id": "810a7ade-5f7e-4e7d-abca-8bd474bf92e2",
+                    "tipo_estudio": "ki67"
+                },
+                {
+                    "fecha_de_muestra": "23-02-1990",
+                    "paciente_id": "810a7ade-5f7e-4e7d-abca-8bd474bf92e2",
+                    "tipo_estudio": "ki67"
+                }
+            ]
+        }
+    ],
+    "update_promedio": [
+        {
+            "section": "HTTP status",
+            "status": "ok",
+            "detail": ""
+        },
+        {
+            "section": "Success message",
+            "status": "ok",
+            "detail": {
+                "message": "Promedio actualizado correctamente"
+            }
+        }
+    ],
+    "delete_informe": [
+        {
+            "section": "HTTP status",
+            "status": "ok",
+            "detail": ""
+        },
+        {
+            "section": "Success message",
+            "status": "ok",
+            "detail": {
+                "message": "Informe eliminado con exito"
+            }
+        }
+    ]
+}

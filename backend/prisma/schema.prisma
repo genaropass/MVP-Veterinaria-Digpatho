@@ -1,0 +1,222 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-py"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role{
+  TRIAL
+  USER
+  ADMIN
+  SUPERADMIN
+}
+
+model Usuario {
+  id               String   @id @default(uuid())
+  mail             String   @unique
+  nombre           String
+  password_hash    String
+  rol              Role     @default(TRIAL)
+  doble_factor     String   @db.VarChar(6)
+  doble_factor_exp String
+  creacion         String
+  activo           Boolean  @default(false)
+  pacientes        Paciente[]
+  deleted_at       DateTime?
+}
+
+model Paciente {
+  id                  String   @id @default(uuid())
+  nombre              String
+  dni                 String   @unique
+  sexo                String
+  fecha_de_nacimiento String
+  informes            Informe[]
+  usuarioId           String
+  usuario             Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  deleted_at          DateTime?
+}
+
+model Informe {
+  id                String   @id @default(uuid())
+  tipo_estudio      String
+  fecha_de_muestra  DateTime
+  promedio_rta_img  String?
+  pacienteId        String
+  paciente          Paciente @relation(fields: [pacienteId], references: [id], onDelete: Cascade)
+  imagenes          Imagen[]
+  deleted_at        DateTime?
+}
+
+model Imagen {
+  id          String    @id @default(uuid())
+  ubicacion   String
+  informeId   String
+  informe     Informe   @relation(fields: [informeId], references: [id], onDelete: Cascade)
+  tipo_imagen String    @default("standard")
+  deleted_at  DateTime?
+}
+
+model Auditoria {
+  id                String   @id @default(uuid())
+  tabla             String
+  operacion         String
+  registro_id       String
+  datos_previos     Json?
+  datos_posteriores Json?
+  usuario_id        String?
+  ip                String?
+  fecha             DateTime @default(now())
+
+  @@index([fecha])
+}
+
+enum DemoRequestStatus {
+  PENDING
+  PROCESSED
+  DONE
+}
+
+model DemoRequest {
+  id        String            @id @default(uuid())
+  name      String
+  email     String
+  message   String?
+  images    Json
+  status    DemoRequestStatus @default(PENDING)
+  createdAt DateTime          @default(now())
+}
+
+// ──────────────────────────────────────────────
+//  Bot Científico: Interconsulta
+// ──────────────────────────────────────────────
+
+model Interconsulta {
+  id              String   @id @default(uuid())
+  tipoEntrada     String
+  imagenId        String?
+  informeId       String?
+  pacienteId      String?
+  contextoClinico String?
+  especialidad    String?
+  status          String   @default("pending")
+  taskId          String?  @unique
+  summary         String?
+  confidence      String?
+  citations       Json?
+  similarCases    Json?
+  heatmapRegions  Json?
+  disclaimer      String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// ──────────────────────────────────────────────
+//  Bot Científico: Vigilancia
+// ──────────────────────────────────────────────
+
+model VigilanciaTopic {
+  id        String   @id @default(uuid())
+  userId    String
+  topic     String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, topic])
+}
+
+model VigilanciaItem {
+  id          String   @id @default(uuid())
+  topic       String
+  title       String
+  source      String
+  url         String
+  publishedAt String
+  impact      String
+  summary     String
+  createdAt   DateTime @default(now())
+}
+
+// ──────────────────────────────────────────────
+//  Bot Genial: Cápsulas (Desafíos)
+// ──────────────────────────────────────────────
+
+model Capsula {
+  id        String           @id @default(uuid())
+  title     String
+  specialty String
+  question  String
+  timeLimit String
+  imagenId  String?
+  active    Boolean          @default(true)
+  options   CapsulaNOption[]
+  createdAt DateTime         @default(now())
+}
+
+model CapsulaNOption {
+  id        String  @id @default(uuid())
+  capsulaId String
+  label     String
+  votes     Int     @default(0)
+  capsula   Capsula @relation(fields: [capsulaId], references: [id])
+}
+
+// ──────────────────────────────────────────────
+//  Bot Genial: Foros
+// ──────────────────────────────────────────────
+
+model ForoThread {
+  id              String   @id @default(uuid())
+  title           String
+  author          String
+  replies         Int      @default(0)
+  specialty       String
+  tags            Json
+  interconsultaId String?
+  casoId          String?
+  lastActivity    DateTime @default(now())
+  createdAt       DateTime @default(now())
+}
+
+// ──────────────────────────────────────────────
+//  Bot Genial: Badges
+// ──────────────────────────────────────────────
+
+model BadgeDefinition {
+  id          String      @id @default(uuid())
+  name        String
+  description String
+  userBadges  UserBadge[]
+}
+
+model UserBadge {
+  id       String          @id @default(uuid())
+  userId   String
+  badgeId  String
+  earnedAt DateTime        @default(now())
+  badge    BadgeDefinition @relation(fields: [badgeId], references: [id])
+
+  @@unique([userId, badgeId])
+}
+
+// ──────────────────────────────────────────────
+//  Bot Genial: Divulgación
+// ──────────────────────────────────────────────
+
+model DivulgacionBorrador {
+  id            String   @id @default(uuid())
+  title         String
+  body          String
+  status        String   @default("pending_review")
+  metricsSource String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}

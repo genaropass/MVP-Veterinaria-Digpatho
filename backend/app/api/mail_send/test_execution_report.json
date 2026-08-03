@@ -1,0 +1,16 @@
+{
+    "send_email": [
+        {
+            "section": "HTTP status",
+            "status": "ok",
+            "detail": "status=200"
+        },
+        {
+            "section": "Success message",
+            "status": "ok",
+            "detail": {
+                "message": "Correo enviado a test@example.com"
+            }
+        }
+    ]
+}

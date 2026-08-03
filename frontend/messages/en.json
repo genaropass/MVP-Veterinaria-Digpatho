@@ -1,0 +1,304 @@
+{
+  "notFound": {
+    "title": "Page not found",
+    "description": "Sorry, the page you are looking for does not exist.",
+    "button": "Return to Home"
+  },
+  "navbar": {
+    "logo": "My Site",
+    "home": "Home",
+    "about": "About Us",
+    "language": "Language",
+    "login": "Login",
+    "register": "Sign Up",
+    "breast-cancer": "Breast Cancer"
+  },
+  "page": {
+    "h1": "Early cancer detection with AI",
+    "text": "Our technology enables cancer detection to be faster and more accurate. The future of pathology is now. The future is",
+    "button": "Discover more",
+    "ai-powered-precision": "AI-Powered Precision in the Fight Against Cancer",
+    "ai-description": "At Digpatho, we harness the power of AI to assist in cancer diagnosis through advanced microscopic image analysis. Our continuous collaboration with scientists ensures ever-improving accuracy.",
+    "main-title": "AI-Powered Precision in the Fight Against Cancer",
+    "description": "At Digpatho, we harness the power of AI to assist in cancer diagnosis through advanced microscopic image analysis. Our continuous collaboration with scientists ensures ever-improving accuracy.",
+    "see-demo": "See Demo",
+    "button2": "Button",
+    "solution-title": "Mitigating Global Shortage of Pathologists",
+    "solution-description": "Our Solution",
+    "accuracy": "Accuracy",
+    "accuracy-description": "Main text for what you want to say. Add key points, quotes, anecdotes, or even a very short story.",
+    "time-management": "Time Management",
+    "time-management-description": "Main text for what you want to say. Add key points, quotes, anecdotes, or even a very short story.",
+    "human-cost": "Human Cost",
+    "human-cost-description": "Main text for what you want to say. Add key points, quotes, anecdotes, or even a very short story.",
+    "economic-cost": "Economic Cost",
+    "economic-cost-description": "Main text for what you want to say. Add key points, quotes, anecdotes, or even a very short story.",
+    "versatility": "Versatility",
+    "versatility-description": "Main text for what you want to say. Add key points, quotes, anecdotes, or even a very short story.",
+    "evolving": "Evolving",
+    "evolving-description": "Main text for what you want to say. Add key points, quotes, anecdotes, or even a very short story."
+  },
+  "footer": {
+    "subtitle-1": "About Us",
+    "textp": "We dedicate ourselves to providing the best AI solutions for pathology. Our mission is to help.",
+    "subtitle-2": "Resources",
+    "li-1": "Investigation",
+    "li-2": "Prostate Cancer",
+    "li-3": "Breast Cancer",
+    "li-4": "Articles",
+    "phone-number": "+54 9 3513 05-8327",
+    "email": "contact@digpatho.com",
+    "subtitle-3": "Contact",
+    "textp-2": "Unleashing the Power of AI for Precision Pathology"
+  },
+  "statics": {
+    "text-s": " Our advanced AI learns from millions of studies and cancerous cells to assist doctors in detecting cancer faster, with greater accuracy, and improving patient outcomes.",
+    "h2": "Revolutionizing Cancer Diagnosis with AI"
+  },
+  "studyTab": {
+    "upload-file": "Upload images (minimum of 5 required)",
+    "image-placeholder": "Click to upload images or drag and drop here -",
+    "analyse-images": "Analyze images",
+    "analysing-images": "Analyzing images...",
+    "analysis-result": "Analysis Results",
+    "analysis-complete": "All images have been analyzed!",
+    "analysis-in-progress": "Analysis in progress...",
+    "min-images-required": "You must upload at least 5 images.",
+    "images-analyzed": "images processed",
+    "image": "Image",
+    "download": "Download",
+    "edit-annotation": "Edit annotation",
+    "patologist-values": "Values reported by pathologist",
+    "ia-values": "Original AI results",
+    "save-anotation": "Save this annotation",
+    "fields-labels": {
+      "total-cells": "Total Cells",
+      "percentage": "Percentage",
+      "positive-cells": "Positive Cells",
+      "negative-cells": "Negative Cells"
+    }
+  },
+  "PatientInfoCard": {
+    "title": "Patient Information",
+    "patient-id": "Personal ID:",
+    "patient-name": "Patient Name:",
+    "patient-sex": "Sex:",
+    "patient-birthdate": "Date of Birth:",
+    "report-number": "Report No.:",
+    "sample-date": "Sample Date:",
+    "report-selection": "Select a Report No.:",
+    "create-report": "Create New Report",
+    "paste-reports": "Past Reports:",
+    "search-patient": "Search Patient",
+    "searching-patient": "Searching...",
+    "create-patient": "Create Patient",
+    "creating-patient": "Creating Patient...",
+    "download-report": "View PDF",
+    "placeholder": {
+      "patient-id": "Enter patient ID",
+      "patient-name": "Enter full name",
+      "report-number": "Enter report number",
+      "patient-sex": "Select sex based on ID",
+      "report-selection": "Select a report"
+    },
+    "sex-options": {
+      "male": "Male (M)",
+      "female": "Female (F)"
+    },
+    "toasts": {
+      "patient-not-found": "Patient not found.",
+      "patient-not-found-description": "Check the ID or entered information.",
+      "patient-created": "Patient created successfully.",
+      "patient-found": "Patient found successfully.",
+      "patient-exists": "Patient already exists in the database.",
+      "patient-deleted": "Patient deleted successfully.",
+      "report-created": "Report created successfully.",
+      "report-deleted": "Report deleted successfully.",
+      "report-warning": "Please select a valid report.",
+      "report-downloaded": "Report downloaded successfully.",
+      "network-error": "Could not connect to the server. Please check your connection or try again later.",
+      "error": "There was an issue communicating with the server. Search could not be completed."
+    },
+    "validations": {
+      "patient-id-min": "ID must have at least 6 digits",
+      "patient-id-max": "ID cannot exceed 8 digits",
+      "id-numbers-only": "ID can only contain numbers",
+      "patient-name-min": "Name must have at least 2 characters",
+      "patient-name-max": "Name cannot exceed 100 characters",
+      "patient-name-letters-only": "Name can only contain letters",
+      "sex-selection-required": "You must select M or F",
+      "birthdate-required": "Date of birth is required"
+    }
+  },
+  "tab-navigation": {
+    "coming-soon": "Coming soon",
+    "tabs": {
+      "ki67": "Ki67",
+      "estrogen": "Estrogen",
+      "progesterone": "Progesterone",
+      "her2": "HER2",
+      "reports": "Reports"
+    }
+  },
+  "criterios-subida": {
+    "button": "Criteria",
+    "rules": "Upload rules: ",
+    "rule-1": "Images at X40 magnification.",
+    "rule-2": "Size: 256px - 1280px.",
+    "rule-3": "Do not resize before uploading.",
+    "rule-4": "Allowed formats: .jpg, .png, .tiff.",
+    "rule-5": "Ensure images are focused and clear."
+  },
+  "report": {
+    "title": "General Report",
+    "result": "Result:",
+    "result-her2": "HER2 Result:",
+    "result-ki67": "KI67 Result:",
+    "interpretation": "Interpretation:",
+    "section_header": "Conclusion will be removed when changing protocol",
+    "patient_info": "Patient Information",
+    "patient_name": "Patient Name:",
+    "sample_date": "Sample Date:",
+    "immunohistochemical_markers": "Immunohistochemical Markers",
+    "conclusion": "Conclusion",
+    "write-your-conclusion-here": "Write your conclusion here",
+    "download_pdf": "Download PDF",
+    "view-pdf": "View PDF",
+    "generate-report": "Generate Report",
+    "allred-index": "Allred Index:",
+    "print": "Print",
+    "estrogen-intensity": "Estrogen Intensity:",
+    "progesterone-intensity": "Progesterone Intensity:",
+    "allred-index-estrogen": "Allred Index for Estrogen:",
+    "allred-index-progesterone": "Allred Index for Progesterone:",
+    "interpretation-estrogen": "Estrogen Interpretation:",
+    "interpretation-progesterone": "Progesterone Interpretation:",
+    "positive-cells-percentage": "Percentage of Positive Cells:",
+    "positive-cells-estrogen": "Percentage of Estrogen-Positive Cells:",
+    "positive-cells-progesterone": "Percentage of Progesterone-Positive Cells:",
+    "low_proliferation_rate": "Low proliferation rate",
+    "mid_proliferation_rate": "Moderate proliferation rate",
+    "high_proliferation_rate": "High proliferation rate",
+    "positive_cells_percentage": "Percentage of positive cells:",
+    "staining-intensity": "Staining Intensity:",
+    "markers": {
+      "ki67": "KI67",
+      "estrogen": "Estrogen",
+      "progesterone": "Progesterone",
+      "her2": "HER2"
+    },
+    "marker-options": {
+      "low": "+",
+      "moderate": "++",
+      "high": "+++",
+      "positive": "Positive",
+      "negative": "Negative",
+      "equivocal": "Equivocal",
+      "na": "N/A"
+    },
+    "toasts": {
+      "success": "Report sent successfully",
+      "error": "There was an error sending the report"
+    }
+  },
+  "sidebar": {
+    "title": "User Panel",
+    "settings": "Settings",
+    "profile": "App",
+    "press": "Press",
+    "close": "to close.",
+    "logout": "Log Out"
+  },
+  "imageEditorModal": {
+    "toatl-points-1": "of",
+    "total-points-2": "points",
+    "show-points": "Show points",
+    "hide-points": "Hide points",
+    "hide": "Hide",
+    "show": "Show",
+    "editon-mode": "Edit mode",
+    "add-points": "Add points",
+    "remove-points": "Remove points",
+    "navigation": "Navigation",
+    "annotation-type": "Annotation type",
+    "contrast": "Contrast",
+    "zoom-in": "Zoom in",
+    "zoom-out": "Zoom out",
+    "visibility": "Visibility",
+    "update-annotation": "Update calculations",
+    "annotation-type-options": {
+      "positive": "Positive",
+      "negative": "Negative",
+      "equivocal": "Non-tumoral tissue"
+    },
+    "toasts": {
+      "success": "Calculations updated successfully."
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "text": "Manage your account preferences and application settings",
+    "theme": "Theme",
+    "appearance": "Appearance",
+    "choose-color-scheme": "Choose your preferred color scheme",
+    "dark-mode": "Dark Mode",
+    "light-mode": "Light Mode",
+    "save-changes": "Save Changes",
+    "profile": "Profile",
+    "default-name": "User"
+  },
+  "sign-in": {
+    "title": "Sign In",
+    "email": "Email",
+    "password": "Password",
+    "button": "Sign In",
+    "sign-up-link": "Don&apos;t have an account? Sign up",
+    "forgot-password-link": "Forgot your password? Recover",
+    "error": "Invalid credentials",
+    "session-expired": "Your session has expired. Please sign in again.",
+    "or-continue-with-email": "Or continue with email"
+  },
+  "error": {
+    "invalid-credentials": "Invalid credentials"
+  },
+  "sign-up": {
+    "title": "Sign Up",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "button": "Sign Up",
+    "sign-up-success": "Account successfully created!",
+    "sign-up-error": "There was an error, please try again."
+  },
+  "forgot-password": {
+    "email": "Email",
+    "button": "Send email",
+    "sending-email": "Sending email...",
+    "error": "Missing data",
+    "msg": "We have sent an email to reset your password. Check your email to continue.",
+    "error-sending": "Error: Email could not be sent"
+  },
+  "reset-password": {
+    "password": "New password",
+    "confirm-password": "Confirm password",
+    "button": "Reset password",
+    "button-loading": "Reseting password...",
+    "error-invalid-token": "Invalid or expired token",
+    "error-missing-data": "Missing data",
+    "error-mismatch": "Passwords do not match",
+    "error-reset": "Error resetting password",
+    "success-msg": "Password modified successfully. Log in..."
+  },
+  "validate-email": {
+    "code": "Verification code",
+    "button": "Confirm",
+    "button-loading": "Validating...",
+    "error-missing-data": "Missing data",
+    "error-server": "Network or server error"
+  },
+  "annotation-type-options": {
+    "high-staining": "High Staining",
+    "moderate-staining": "Moderate Staining",
+    "no-staining": "No Staining"
+  }
+}

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin BD — Digpatho</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #1e293b;
+      --panel-2: #334155;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --danger: #ef4444;
+      --ok: #22c55e;
+      --border: #475569;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    .wrap { max-width: 1400px; margin: 0 auto; padding: 24px; }
+    h1 { font-size: 1.5rem; margin-bottom: 4px; }
+    .subtitle { color: var(--muted); font-size: 0.9rem; margin-bottom: 24px; }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .login-grid { display: grid; gap: 14px; max-width: 420px; }
+    label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 6px; }
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+    input:focus { outline: 2px solid var(--accent); border-color: transparent; }
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+    }
+    button:hover { background: var(--accent-hover); }
+    button.secondary { background: var(--panel-2); }
+    button.secondary:hover { background: #3f4f66; }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid var(--danger);
+      color: #fecaca;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      display: none;
+    }
+    .error.show { display: block; }
+    .layout { display: grid; grid-template-columns: 260px 1fr; gap: 20px; }
+    @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+    .sidebar .table-btn {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      text-align: left;
+      margin-bottom: 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-weight: 500;
+    }
+    .sidebar .table-btn.active {
+      border-color: var(--accent);
+      background: rgba(99, 102, 241, 0.15);
+    }
+    .badge {
+      background: var(--panel-2);
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .toolbar .spacer { flex: 1; }
+    .user-info { color: var(--muted); font-size: 0.85rem; }
+    .table-wrap { overflow: auto; border: 1px solid var(--border); border-radius: 8px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    th, td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+      max-width: 280px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    th {
+      background: var(--bg);
+      color: var(--muted);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    tr:hover td { background: rgba(99, 102, 241, 0.06); }
+    .pagination {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    .hidden { display: none !important; }
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .loading { color: var(--muted); padding: 24px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header-row">
+      <div>
+        <h1>Panel Admin — Base de datos</h1>
+        <p class="subtitle">Acceso protegido con contraseña de administrador</p>
+      </div>
+      <button id="logoutBtn" class="secondary hidden" type="button">Cerrar sesión</button>
+    </div>
+
+    <div id="loginSection" class="card">
+      <div class="login-grid">
+        <div>
+          <label for="password">Contraseña de admin</label>
+          <input id="password" type="password" autocomplete="current-password">
+        </div>
+        <div id="loginError" class="error"></div>
+        <button id="loginBtn" type="button">Ingresar</button>
+      </div>
+    </div>
+
+    <div id="appSection" class="hidden">
+      <div class="layout">
+        <aside class="card sidebar">
+          <p class="user-info" id="userInfo"></p>
+          <hr style="border: none; border-top: 1px solid var(--border); margin: 14px 0;">
+          <div id="tablesList"></div>
+        </aside>
+        <main class="card">
+          <div class="toolbar">
+            <h2 id="tableTitle">Seleccioná una tabla</h2>
+            <span class="spacer"></span>
+            <input id="searchInput" type="search" placeholder="Buscar..." style="max-width: 220px;" disabled>
+            <button id="searchBtn" type="button" class="secondary" disabled>Buscar</button>
+          </div>
+          <div id="tableContent" class="loading">Elegí una tabla del menú lateral.</div>
+          <div id="pagination" class="pagination hidden"></div>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const PASSWORD_KEY = "digpatho_admin_password";
+    let adminPassword = sessionStorage.getItem(PASSWORD_KEY) || "";
+    let currentTable = null;
+    let currentPage = 1;
+    let currentQuery = "";
+
+    const loginSection = document.getElementById("loginSection");
+    const appSection = document.getElementById("appSection");
+    const loginError = document.getElementById("loginError");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const tablesList = document.getElementById("tablesList");
+    const tableTitle = document.getElementById("tableTitle");
+    const tableContent = document.getElementById("tableContent");
+    const pagination = document.getElementById("pagination");
+    const searchInput = document.getElementById("searchInput");
+    const searchBtn = document.getElementById("searchBtn");
+    const userInfo = document.getElementById("userInfo");
+
+    function showError(msg) {
+      loginError.textContent = msg;
+      loginError.classList.add("show");
+    }
+
+    function clearError() {
+      loginError.textContent = "";
+      loginError.classList.remove("show");
+    }
+
+    async function api(path, options = {}) {
+      const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
+      if (adminPassword) headers["X-Admin-Password"] = adminPassword;
+      const res = await fetch(path, { ...options, headers });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.detail || ("Error " + res.status));
+      return data;
+    }
+
+    function setLoggedIn(loggedIn) {
+      loginSection.classList.toggle("hidden", loggedIn);
+      appSection.classList.toggle("hidden", !loggedIn);
+      logoutBtn.classList.toggle("hidden", !loggedIn);
+    }
+
+    async function login() {
+      clearError();
+      const password = document.getElementById("password").value;
+      if (!password) {
+        showError("Ingresá la contraseña de admin.");
+        return;
+      }
+      try {
+        const res = await fetch("/admin/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ password }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || "Contraseña incorrecta");
+        adminPassword = password;
+        sessionStorage.setItem(PASSWORD_KEY, adminPassword);
+        await bootstrapApp();
+      } catch (err) {
+        showError(err.message);
+      }
+    }
+
+    function logout() {
+      adminPassword = "";
+      sessionStorage.removeItem(PASSWORD_KEY);
+      currentTable = null;
+      setLoggedIn(false);
+    }
+
+    async function bootstrapApp() {
+      try {
+        await api("/admin/api/me");
+        userInfo.textContent = "Sesión admin activa";
+        setLoggedIn(true);
+        await loadTables();
+      } catch (err) {
+        logout();
+        showError(err.message);
+      }
+    }
+
+    async function loadTables() {
+      tablesList.innerHTML = '<div class="loading">Cargando tablas...</div>';
+      const tables = await api("/admin/api/tables");
+      tablesList.innerHTML = "";
+      tables.forEach((t) => {
+        const btn = document.createElement("button");
+        btn.className = "table-btn";
+        btn.dataset.table = t.name;
+        btn.innerHTML = '<span>' + t.label + '</span><span class="badge">' + t.count + '</span>';
+        btn.onclick = () => selectTable(t.name, t.label);
+        tablesList.appendChild(btn);
+      });
+      if (tables.length && !currentTable) {
+        selectTable(tables[0].name, tables[0].label);
+      }
+    }
+
+    function updateActiveButton() {
+      document.querySelectorAll(".table-btn").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.table === currentTable);
+      });
+    }
+
+    async function selectTable(name, label) {
+      currentTable = name;
+      currentPage = 1;
+      currentQuery = "";
+      searchInput.value = "";
+      tableTitle.textContent = label;
+      searchInput.disabled = false;
+      searchBtn.disabled = false;
+      updateActiveButton();
+      await loadRows();
+    }
+
+    function renderTable(rows) {
+      if (!rows.length) {
+        tableContent.innerHTML = '<div class="loading">Sin registros.</div>';
+        return;
+      }
+      const cols = Object.keys(rows[0]);
+      let html = '<div class="table-wrap"><table><thead><tr>';
+      cols.forEach((c) => { html += "<th>" + c + "</th>"; });
+      html += "</tr></thead><tbody>";
+      rows.forEach((row) => {
+        html += "<tr>";
+        cols.forEach((c) => {
+          const val = row[c];
+          const text = val === null || val === undefined ? "" : String(val);
+          html += '<td title="' + text.replace(/"/g, "&quot;") + '">' + text + "</td>";
+        });
+        html += "</tr>";
+      });
+      html += "</tbody></table></div>";
+      tableContent.innerHTML = html;
+    }
+
+    function renderPagination(data) {
+      if (data.total <= data.page_size) {
+        pagination.classList.add("hidden");
+        return;
+      }
+      pagination.classList.remove("hidden");
+      pagination.innerHTML = "";
+      const info = document.createElement("span");
+      info.textContent = "Página " + data.page + " de " + data.pages + " (" + data.total + " registros)";
+      pagination.appendChild(info);
+
+      const prev = document.createElement("button");
+      prev.textContent = "Anterior";
+      prev.className = "secondary";
+      prev.disabled = data.page <= 1;
+      prev.onclick = () => { currentPage--; loadRows(); };
+      pagination.appendChild(prev);
+
+      const next = document.createElement("button");
+      next.textContent = "Siguiente";
+      next.className = "secondary";
+      next.disabled = data.page >= data.pages;
+      next.onclick = () => { currentPage++; loadRows(); };
+      pagination.appendChild(next);
+    }
+
+    async function loadRows() {
+      if (!currentTable) return;
+      tableContent.innerHTML = '<div class="loading">Cargando...</div>';
+      pagination.classList.add("hidden");
+      try {
+        const params = new URLSearchParams({
+          page: String(currentPage),
+          page_size: "50",
+        });
+        if (currentQuery) params.set("q", currentQuery);
+        const data = await api("/admin/api/tables/" + currentTable + "?" + params.toString());
+        renderTable(data.rows);
+        renderPagination(data);
+      } catch (err) {
+        tableContent.innerHTML = '<div class="loading" style="color:#fecaca;">' + err.message + "</div>";
+      }
+    }
+
+    document.getElementById("loginBtn").onclick = login;
+    document.getElementById("password").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") login();
+    });
+    logoutBtn.onclick = logout;
+    searchBtn.onclick = () => {
+      currentQuery = searchInput.value.trim();
+      currentPage = 1;
+      loadRows();
+    };
+    searchInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") searchBtn.click();
+    });
+
+    if (adminPassword) bootstrapApp();
+  </script>
+</body>
+</html>

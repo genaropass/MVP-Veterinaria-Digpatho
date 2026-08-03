@@ -1,0 +1,87 @@
+# Deploy Backend Producción → GCP Compute Engine (VM)
+# Requiere: HOST_BACKEND (IP o hostname de la VM), SSH_PRIVATE_KEY, opcional SSH_USER
+#
+# DESHABILITADO en push: GitHub Actions no corre por falta de pago en el plan.
+# Producción real despliega desde rama preproduccion por SSH manual.
+name: Deploy Backend Production (GCP)
+
+on:
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      SSH_USER: ${{ secrets.SSH_USER || 'ubuntu' }}
+
+    steps:
+      - name: ⬇️ Checkout código
+        uses: actions/checkout@v3
+
+      - name: 🔐 Setup SSH Agent
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: 📦 Subir nuevo código a la VM GCP (backend_new)
+        run: |
+          rsync -avz --delete \
+            --exclude='.env' \
+            --exclude='venv' \
+            . ${{ env.SSH_USER }}@${{ secrets.HOST_BACKEND }}:~/backend_new/ \
+            -e "ssh -o StrictHostKeyChecking=no"
+
+      - name: 🚀 Ejecutar deploy remoto con rollback
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ env.SSH_USER }}@${{ secrets.HOST_BACKEND }} << 'EOF'
+            set -e
+            echo "⚠️ Parando servicio actual..."
+            sudo systemctl stop uvicorn || true
+
+            echo "🔄 Backup del backend actual..."
+            rm -rf ~/backend_backup
+            cp -r ~/backend ~/backend_backup
+
+            echo "📁 Reemplazando backend por nuevo código..."
+            rm -rf ~/backend
+            mv ~/backend_new ~/backend
+
+            echo "🔧 Preparando entorno..."
+            if [ ! -d ~/backend/venv ]; then
+              python3 -m venv ~/backend/venv
+            fi
+
+            source ~/backend/venv/bin/activate
+            pip install --upgrade pip
+            pip install -r ~/backend/requirements.txt
+
+            echo "⚙️ Generando prisma..."
+            cd ~/backend
+            prisma generate
+
+            echo "♻️ Recargando systemd..."
+            sudo systemctl daemon-reload
+
+            echo "🚀 Iniciando uvicorn..."
+            sudo systemctl start uvicorn
+
+            echo "⏳ Esperando 10 segundos para validación..."
+            sleep 10
+
+            if ! systemctl is-active --quiet uvicorn; then
+              echo "❌ Error en deploy. Restaurando backup..."
+              sudo systemctl stop uvicorn
+              rm -rf ~/backend
+              mv ~/backend_backup ~/backend
+              sudo systemctl start uvicorn
+              exit 1
+            fi
+
+            echo "✅ Deploy exitoso. Limpiando backup..."
+            rm -rf ~/backend_backup
+          EOF
+
+

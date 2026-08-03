@@ -1,0 +1,304 @@
+{
+  "notFound": {
+    "title": "Página não encontrada",
+    "description": "Desculpe, a página que você procura não existe.",
+    "button": "Voltar para a página inicial"
+  },
+  "navbar": {
+    "logo": "Meu Site",
+    "home": "Início",
+    "about": "Sobre Nós",
+    "language": "Idioma",
+    "login": "Entrar",
+    "register": "Registrar-se",
+    "breast-cancer": "Câncer de Mama"
+  },
+  "page": {
+    "h1": "Detecção precoce de câncer com IA",
+    "text": "Nossa tecnologia permite que a detecção do câncer seja mais rápida e precisa. O futuro da patologia é agora. O futuro é",
+    "button": "Conheça mais",
+    "ai-powered-precision": "Precisão impulsionada por IA na luta contra o câncer",
+    "ai-description": "Na Digpatho, aproveitamos o poder da IA para ajudar no diagnóstico do câncer por meio da análise avançada de imagens microscópicas. Nossa colaboração contínua com cientistas garante uma precisão em constante melhoria.",
+    "main-title": "Precisão impulsionada por IA na luta contra o câncer",
+    "description": "Na Digpatho, aproveitamos o poder da IA para ajudar no diagnóstico do câncer por meio da análise avançada de imagens microscópicas. Nossa colaboração contínua com cientistas garante uma precisão em constante melhoria.",
+    "see-demo": "Ver Demonstração",
+    "button2": "Botão",
+    "solution-title": "Mitigando a escassez global de patologistas",
+    "solution-description": "Nossa Solução",
+    "accuracy": "Precisão",
+    "accuracy-description": "Texto principal para o que você deseja dizer. Adicione pontos principais, citações, anedotas ou até mesmo uma história muito curta.",
+    "time-management": "Gestão de Tempo",
+    "time-management-description": "Texto principal para o que você deseja dizer. Adicione pontos principais, citações, anedotas ou até mesmo uma história muito curta.",
+    "human-cost": "Custo Humano",
+    "human-cost-description": "Texto principal para o que você deseja dizer. Adicione pontos principais, citações, anedotas ou até mesmo uma história muito curta.",
+    "economic-cost": "Custo Econômico",
+    "economic-cost-description": "Texto principal para o que você deseja dizer. Adicione pontos principais, citações, anedotas ou até mesmo uma história muito curta.",
+    "versatility": "Versatilidade",
+    "versatility-description": "Texto principal para o que você deseja dizer. Adicione pontos principais, citações, anedotas ou até mesmo uma história muito curta.",
+    "evolving": "Evoluindo",
+    "evolving-description": "Texto principal para o que você deseja dizer. Adicione pontos principais, citações, anedotas ou até mesmo uma história muito curta."
+  },
+  "footer": {
+    "subtitle-1": "Sobre Nós",
+    "textp": "Nos dedicamos a fornecer as melhores soluções de IA para patologia. Nossa missão é ajudar.",
+    "subtitle-2": "Recursos",
+    "li-1": "Pesquisa",
+    "li-2": "Câncer de Próstata",
+    "li-3": "Câncer de Mama",
+    "li-4": "Artigos",
+    "phone-number": "+54 9 3513 05-8327",
+    "email": "contact@digpatho.com",
+    "subtitle-3": "Contato",
+    "textp-2": "Desbloqueando o Poder da IA para uma Patologia de Precisão"
+  },
+  "statics": {
+    "text-s": "Nossa IA avançada aprende com milhões de estudos e células cancerosas para ajudar os médicos a detectar o câncer mais rapidamente, com maior precisão e melhorar os resultados dos pacientes.",
+    "h2": "Revolucionando o Diagnóstico do Câncer com IA"
+  },
+  "studyTab": {
+    "upload-file": "Enviar imagens (mínimo de 5 são necessárias)",
+    "image-placeholder": "Clique para enviar imagens ou arraste e solte aqui -",
+    "analyse-images": "Analisar imagens",
+    "analysing-images": "Analisando imagens...",
+    "analysis-result": "Resultados da análise",
+    "analysis-complete": "Todas as imagens foram analisadas!",
+    "analysis-in-progress": "Análise em andamento...",
+    "min-images-required": "Você deve enviar pelo menos 5 imagens.",
+    "images-analyzed": "imagens processadas",
+    "image": "Imagem",
+    "download": "Baixar",
+    "edit-annotation": "Corrigir anotação",
+    "patologist-values": "Valores relatados pelo patologista",
+    "ia-values": "Resultados originais da IA",
+    "save-anotation": "Salvar esta anotação",
+    "fields-labels": {
+      "total-cells": "Células Totais",
+      "percentage": "Porcentagem",
+      "positive-cells": "Células Positivas",
+      "negative-cells": "Células Negativas"
+    }
+  },
+  "PatientInfoCard": {
+    "title": "Dados do Paciente",
+    "patient-id": "Identificação pessoal:",
+    "patient-name": "Nome do Paciente:",
+    "patient-sex": "Sexo:",
+    "patient-birthdate": "Data de Nascimento:",
+    "report-number": "Nº do relatório:",
+    "sample-date": "Data da amostra:",
+    "report-selection": "Escolha um Nº de relatório:",
+    "create-report": "Criar novo Relatório",
+    "paste-reports": "Relatórios anteriores:",
+    "search-patient": "Buscar Paciente",
+    "searching-patient": "Buscando...",
+    "create-patient": "Criar Paciente",
+    "creating-patient": "Criando Paciente...",
+    "download-report": "Ver PDF",
+    "placeholder": {
+      "patient-id": "Digite a identificação do paciente",
+      "patient-name": "Digite o nome completo",
+      "report-number": "Digite o número do relatório",
+      "patient-sex": "Selecione o sexo conforme a identificação",
+      "report-selection": "Selecione um relatório"
+    },
+    "sex-options": {
+      "male": "Masculino (M)",
+      "female": "Feminino (F)"
+    },
+    "toasts": {
+      "patient-not-found": "Paciente não encontrado.",
+      "patient-not-found-description": "Verifique o CPF ou os dados inseridos.",
+      "patient-created": "Paciente criado com sucesso.",
+      "patient-found": "Paciente encontrado com sucesso.",
+      "patient-exists": "O paciente já existe na base de dados.",
+      "patient-deleted": "Paciente removido com sucesso.",
+      "report-created": "Relatório criado com sucesso.",
+      "report-deleted": "Relatório removido com sucesso.",
+      "report-warning": "Selecione um relatório válido.",
+      "report-downloaded": "Relatório baixado com sucesso.",
+      "network-error": "Não foi possível conectar ao servidor. Verifique sua conexão ou tente mais tarde.",
+      "error": "Houve um problema ao se comunicar com o servidor. Não foi possível concluir a busca."
+    },
+    "validations": {
+      "patient-id-min": "O CPF deve ter pelo menos 6 dígitos",
+      "patient-id-max": "O CPF não pode ter mais de 8 dígitos",
+      "id-numbers-only": "O CPF deve conter apenas números",
+      "patient-name-min": "O nome deve ter pelo menos 2 caracteres",
+      "patient-name-max": "O nome não pode exceder 100 caracteres",
+      "patient-name-letters-only": "O nome deve conter apenas letras e espaços",
+      "sex-selection-required": "É necessário selecionar M ou F",
+      "birthdate-required": "A data de nascimento é obrigatória"
+    }
+  },
+  "tab-navigation": {
+    "coming-soon": "Em breve",
+    "tabs": {
+      "ki67": "Ki67",
+      "estrogen": "Estrogênio",
+      "progesterone": "Progesterona",
+      "her2": "HER2",
+      "reports": "Relatórios"
+    }
+  },
+  "criterios-subida": {
+    "button": "Critérios",
+    "rules": "Regras de envio: ",
+    "rule-1": "Imagens com ampliação de X40.",
+    "rule-2": "Tamanho: 256px - 1280px.",
+    "rule-3": "Não redimensionar antes de enviar.",
+    "rule-4": "Formatos permitidos: .jpg, .png, .tiff.",
+    "rule-5": "Certifique-se de que as imagens estejam focadas e nítidas."
+  },
+  "report": {
+    "title": "Relatório Geral",
+    "result": "Resultado:",
+    "result-her2": "Resultado HER2:",
+    "result-ki67": "Resultado KI67:",
+    "interpretation": "Interpretação:",
+    "section_header": "A conclusão será removida ao mudar de protocolo",
+    "patient_info": "Dados do Paciente",
+    "patient_name": "Nome do Paciente:",
+    "sample_date": "Data da amostra:",
+    "immunohistochemical_markers": "Marcadores Imuno-histoquímicos",
+    "conclusion": "Conclusão",
+    "write-your-conclusion-here": "Escreva sua conclusão aqui",
+    "download_pdf": "Baixar PDF",
+    "view-pdf": "Ver PDF",
+    "generate-report": "Gerar Relatório",
+    "allred-index": "Índice de Allred:",
+    "print": "Imprimir",
+    "estrogen-intensity": "Intensidade do Estrogênio:",
+    "progesterone-intensity": "Intensidade da Progesterona:",
+    "allred-index-estrogen": "Índice de Allred para Estrogênio:",
+    "allred-index-progesterone": "Índice de Allred para Progesterona:",
+    "interpretation-estrogen": "Interpretação do Estrogênio:",
+    "interpretation-progesterone": "Interpretação da Progesterona:",
+    "positive-cells-percentage": "Percentual de células positivas:",
+    "positive-cells-estrogen": "Percentual de células positivas para Estrogênio:",
+    "positive-cells-progesterone": "Percentual de células positivas para Progesterona:",
+    "low_proliferation_rate": "Baixo índice de proliferação",
+    "mid_proliferation_rate": "Índice de proliferação moderado",
+    "high_proliferation_rate": "Alto índice de proliferação",
+    "positive_cells_percentage": "Percentual de células positivas:",
+    "staining-intensity": "Intensidade da coloração:",
+    "markers": {
+      "ki67": "KI67",
+      "estrogen": "Estrogênio",
+      "progesterone": "Progesterona",
+      "her2": "HER2"
+    },
+    "marker-options": {
+      "low": "+",
+      "moderate": "++",
+      "high": "+++",
+      "positive": "Positivo",
+      "negative": "Negativo",
+      "equivocal": "Equívoco",
+      "na": "N/D"
+    },
+    "toasts": {
+      "success": "Relatório enviado com sucesso",
+      "error": "Houve um erro ao enviar o relatório"
+    }
+  },
+  "sidebar": {
+    "title": "Painel do Usuário",
+    "settings": "Configurações",
+    "profile": "Aplicação",
+    "press": "Pressione",
+    "close": "para fechar.",
+    "logout": "Encerrar Sessão"
+  },
+  "imageEditorModal": {
+    "toatl-points-1": "de",
+    "total-points-2": "pontos",
+    "show-points": "Mostrar pontos",
+    "hide-points": "Ocultar pontos",
+    "hide": "Ocultar",
+    "show": "Mostrar",
+    "editon-mode": "Modo de edição",
+    "add-points": "Adicionar pontos",
+    "remove-points": "Remover pontos",
+    "navigation": "Navegação",
+    "annotation-type": "Tipo de anotação",
+    "contrast": "Contraste",
+    "zoom-in": "Aproximar",
+    "zoom-out": "Afastar",
+    "visibility": "Visibilidade",
+    "update-annotation": "Atualizar cálculos",
+    "annotation-type-options": {
+      "positive": "Positivo",
+      "negative": "Negativo",
+      "equivocal": "Tecido não tumoral"
+    },
+    "toasts": {
+      "success": "Cálculos atualizados com sucesso."
+    }
+  },
+  "settings": {
+    "title": "Configurações",
+    "text": "Gerencie suas preferências de conta e configurações do aplicativo",
+    "theme": "Tema",
+    "appearance": "Aparência",
+    "choose-color-scheme": "Escolha seu esquema de cores preferido",
+    "dark-mode": "Modo Escuro",
+    "light-mode": "Modo Claro",
+    "save-changes": "Salvar Alterações",
+    "profile": "Perfil",
+    "default-name": "Usuário"
+  },
+  "sign-in": {
+    "title": "Entrar",
+    "email": "E-mail",
+    "password": "Senha",
+    "button": "Entrar",
+    "sign-up-link": "Não tem uma conta? Registre-se",
+    "forgot-password-link": "Esqueceu sua senha? Recuperar",
+    "error": "Credenciais inválidas",
+    "session-expired": "Sua sessão expirou. Por favor, entre novamente.",
+    "or-continue-with-email": "Ou continue com e-mail"
+  },
+  "error": {
+    "invalid-credentials": "Credenciais inválidas"
+  },
+  "sign-up": {
+    "title": "Cadastrar",
+    "name": "Nome",
+    "email": "E-mail",
+    "password": "Senha",
+    "button": "Cadastrar",
+    "sign-up-success": "Conta criada com sucesso!",
+    "sign-up-error": "Ocorreu um erro, por favor tente novamente."
+  },
+  "forgot-password": {
+    "email": "E-mail",
+    "button": "Enviar e-mail",
+    "sending-email": "Enviando e-mail...",
+    "error": "Dados faltando",
+    "msg": "Enviamos um e-mail para redefinir sua senha. Verifique seu e-mail para continuar.",
+    "error-sending": "Erro: Não foi possível enviar o e-mail"
+  },
+  "reset-password": {
+    "password": "Nova senha",
+    "confirm-password": "Confirmar senha",
+    "button": "Redefinir senha",
+    "button-loading": "Redefinindo senha...",
+    "error-invalid-token": "Token inválido ou expirado",
+    "error-missing-data": "Dados faltando",
+    "error-mismatch": "As senhas não coincidem",
+    "error-reset": "Erro ao redefinir a senha",
+    "success-msg": "Senha modificada com sucesso. Faça login..."
+  },
+  "validate-email": {
+    "code": "Código de verificação",
+    "button": "Confirmar",
+    "button-loading": "Validando...",
+    "error-missing-data": "Dados faltando",
+    "error-server": "Erro de rede ou do servidor"
+  },
+  "annotation-type-options": {
+    "high-staining": "Coloração Alta",
+    "moderate-staining": "Coloração Moderada",
+    "no-staining": "Sem Coloração"
+  }
+}

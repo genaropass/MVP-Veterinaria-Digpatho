@@ -1,0 +1,110 @@
+name: Deploy DigpathoWeb Preproducción
+
+on:
+  push:
+    branches:
+      - preproduccion
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout DigpathoWeb repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies and build
+        run: |
+          npm install
+          npm run build
+
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Copy files to server (deploy temp folder)
+        uses: appleboy/scp-action@v0.1.5
+        with:
+          host: ${{ secrets.HOST_FRONTEND }}
+          username: ${{ secrets.USER_SSH }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "."
+          target: "/home/ubuntu/DigpathoWeb_prepro_new"
+
+      - name: Deploy on server safely with rollback
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USER_SSH }}@${{ secrets.HOST_FRONTEND }} << 'EOF'
+            set -e
+
+            MAIN_DIR="/home/ubuntu/DigpathoWeb_prepro"
+            NEW_DIR="/home/ubuntu/DigpathoWeb_prepro_new"
+            TEMP_PORT=3101
+            PROD_PORT=3100
+            APP_NAME="digpatho-frontend-prepro"
+
+            # Configuración de config en carpeta nueva
+            rm -rf $NEW_DIR/config
+            ln -s /home/ubuntu/config/digpatho_prepro $NEW_DIR/config
+
+            # Exportar variables de entorno
+            export $(cat /home/ubuntu/config/digpatho_prepro/.env | xargs)
+
+            # Probar la build en puerto temporal
+            echo "🚀 Probando build en $TEMP_PORT..."
+            cd $NEW_DIR
+            PORT=$TEMP_PORT npm start &
+            TEST_PID=$!
+
+            max_attempts=12
+            attempt_num=1
+            until curl -s http://localhost:$TEMP_PORT > /dev/null; do
+              if [ $attempt_num -ge $max_attempts ]; then
+                echo "❌ La build no responde en puerto $TEMP_PORT, abortando deploy..."
+                kill $TEST_PID || true
+
+                # Restaurar versión anterior si existía
+                if pm2 describe $APP_NAME > /dev/null; then
+                  echo "♻️ Restaurando proceso anterior..."
+                  pm2 start npm --name $APP_NAME -- start --update-env
+                fi
+
+                exit 1
+              fi
+              echo "Intento $attempt_num: Next.js no responde aún, esperando 5s..."
+              attempt_num=$((attempt_num+1))
+              sleep 5
+            done
+
+            echo "✅ Build OK en $TEMP_PORT, reemplazando carpeta principal..."
+            kill $TEST_PID || true
+
+            # Backup de carpeta actual
+            if [ -d "$MAIN_DIR" ]; then
+              mv $MAIN_DIR ${MAIN_DIR}_backup_$(date +%Y%m%d%H%M%S)
+            fi
+
+            # Mover nueva carpeta a principal
+            mv $NEW_DIR $MAIN_DIR
+            cd $MAIN_DIR
+
+            # Reiniciar PM2 en puerto de producción
+            if pm2 describe $APP_NAME > /dev/null; then
+              pm2 restart $APP_NAME --update-env
+            else
+              pm2 start npm --name $APP_NAME -- start -- -p $PROD_PORT --update-env
+            fi
+
+            echo "✅ Deploy completado en puerto $PROD_PORT"
+
+            # Limpiar backups antiguos
+            find /home/ubuntu -maxdepth 1 -type d -name 'DigpathoWeb_prepro_backup_*' -exec rm -rf {} +
+
+          EOF
+

@@ -1,0 +1,147 @@
+# Deploy Backend Preproducción → GCP Compute Engine (VM)
+# Requiere: HOST_BACKEND, SSH_PRIVATE_KEY. Usuario por defecto GCP: octavio_carranza_torres (override con secret SSH_USER)
+#
+# DESHABILITADO en push: GitHub Actions no corre por falta de pago en el plan.
+# Deploy de producción/preproducción: manual por SSH (ver deploy.py o tarball + script en la VM).
+# Para reactivar CI: descomentar el bloque `push` y quitar `workflow_dispatch` si no se usa.
+name: Deploy Backend Preproducción (GCP)
+
+on:
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - preproduccion
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      # Usuario por defecto para VM GCP (override con secret SSH_USER si hace falta)
+      SSH_USER: ${{ secrets.SSH_USER || 'octavio_carranza_torres' }}
+
+    steps:
+      - name: ⬇️ Checkout código (rama preproducción)
+        uses: actions/checkout@v3
+        with:
+          ref: preproduccion
+
+      - name: 🔐 Setup SSH Agent
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: 👤 Definir usuario SSH (GCP)
+        run: |
+          echo "SSH_USER=${{ secrets.SSH_USER || 'octavio_carranza_torres' }}" >> $GITHUB_ENV
+          echo "Usando usuario SSH: ${{ secrets.SSH_USER || 'octavio_carranza_torres' }}"
+
+      - name: 📦 Subir nuevo código a la VM GCP (backend_prepro_new)
+        run: |
+          rsync -avz --delete \
+            --exclude='.env' \
+            --exclude='*.env*' \
+            --exclude='env.*.back' \
+            --exclude='venv' \
+            --exclude='.github-actions-keys' \
+            --exclude='*.pem' \
+            . ${SSH_USER}@${{ secrets.HOST_BACKEND }}:~/backend_prepro_new/ \
+            -e "ssh -o StrictHostKeyChecking=no"
+
+      - name: 🚀 Ejecutar deploy remoto con rollback preproducción
+        run: |
+          ssh -o StrictHostKeyChecking=no ${SSH_USER}@${{ secrets.HOST_BACKEND }} << 'EOF'
+            set -e
+            DEPLOY_USER=$(whoami)
+            echo "⚠️ Parando servicio preproducción..."
+            sudo systemctl stop uvicorn-prepro 2>/dev/null || true
+
+            if [ -d ~/backend_prepro ]; then
+              echo "🔄 Backup del backend preproducción actual..."
+              rm -rf ~/backend_prepro_backup
+              cp -r ~/backend_prepro ~/backend_prepro_backup
+              echo "📁 Reemplazando backend preproducción por nuevo código..."
+              sudo chown -R "$DEPLOY_USER:$DEPLOY_USER" ~/backend_prepro 2>/dev/null || true
+              rm -rf ~/backend_prepro
+            else
+              echo "📁 Primera vez: creando backend_prepro desde código nuevo..."
+            fi
+            mv ~/backend_prepro_new ~/backend_prepro
+            sudo chown -R "$DEPLOY_USER:$DEPLOY_USER" ~/backend_prepro
+
+            echo "🔧 Preparando entorno preproducción..."
+            if [ ! -d ~/backend_prepro/venv ]; then
+              python3 -m venv ~/backend_prepro/venv
+            fi
+
+            source ~/backend_prepro/venv/bin/activate
+            pip install --upgrade pip
+            pip install -r ~/backend_prepro/requirements.txt
+
+            echo "⚙️ Generando prisma preproducción..."
+            cd ~/backend_prepro
+            prisma generate
+
+            echo "📋 Creando unit systemd uvicorn-prepro si no existe..."
+            if [ ! -f /etc/systemd/system/uvicorn-prepro.service ]; then
+              sed "s/__DEPLOY_USER__/$DEPLOY_USER/g" ~/backend_prepro/.github/uvicorn-prepro.service | sudo tee /etc/systemd/system/uvicorn-prepro.service > /dev/null
+              sudo systemctl enable uvicorn-prepro
+              echo "✅ Unit uvicorn-prepro.service creado."
+            fi
+
+            echo "♻️ Recargando systemd..."
+            sudo systemctl daemon-reload
+
+            echo "🚀 Iniciando uvicorn-prepro..."
+            sudo systemctl start uvicorn-prepro
+
+            echo "⏳ Esperando 20 segundos para que el servicio inicie completamente..."
+            sleep 20
+
+            echo "🔍 Verificando estado del servicio..."
+            SERVICE_STATUS=$(systemctl is-active uvicorn-prepro 2>&1 || echo "inactive")
+            echo "Estado del servicio: $SERVICE_STATUS"
+            
+            echo "📋 Últimos 100 logs del servicio:"
+            sudo journalctl -u uvicorn-prepro.service -n 100 --no-pager || true
+            
+            echo "📊 Estado detallado del servicio:"
+            sudo systemctl status uvicorn-prepro --no-pager -l || true
+
+            # Verificar que el servicio esté activo con múltiples intentos
+            MAX_RETRIES=5
+            RETRY_COUNT=0
+            SERVICE_ACTIVE=false
+            
+            while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+              if systemctl is-active --quiet uvicorn-prepro; then
+                SERVICE_ACTIVE=true
+                echo "✅ Servicio está activo después de $((RETRY_COUNT * 5 + 20)) segundos"
+                break
+              fi
+              RETRY_COUNT=$((RETRY_COUNT + 1))
+              echo "⏳ Reintento $RETRY_COUNT/$MAX_RETRIES - El servicio aún no está activo, esperando 5 segundos más..."
+              sleep 5
+              # Mostrar logs en cada reintento para diagnóstico
+              echo "📋 Logs recientes (reintento $RETRY_COUNT):"
+              sudo journalctl -u uvicorn-prepro.service -n 30 --no-pager || true
+            done
+
+            if [ "$SERVICE_ACTIVE" = false ]; then
+              echo "❌ Error en deploy preproducción. El servicio no está activo después de $((MAX_RETRIES * 5 + 20)) segundos."
+              echo "📋 Logs de error finales:"
+              sudo journalctl -u uvicorn-prepro.service -n 200 --no-pager || true
+              echo "📊 Estado final del servicio:"
+              sudo systemctl status uvicorn-prepro --no-pager -l || true
+              echo "🔄 Restaurando backup..."
+              sudo systemctl stop uvicorn-prepro || true
+              sudo chown -R "$DEPLOY_USER:$DEPLOY_USER" ~/backend_prepro 2>/dev/null || true
+              rm -rf ~/backend_prepro 2>/dev/null || true
+              mv ~/backend_prepro_backup ~/backend_prepro
+              sudo chown -R "$DEPLOY_USER:$DEPLOY_USER" ~/backend_prepro
+              sudo systemctl start uvicorn-prepro
+              exit 1
+            fi
+
+            echo "✅ Deploy preproducción exitoso. Limpiando backup..."
+            rm -rf ~/backend_prepro_backup || sudo rm -rf ~/backend_prepro_backup
+          EOF

@@ -1,0 +1,49 @@
+DEPLOY_README.md
+node_modules
+# Keep environment variables out of version control
+.env
+venv/
+# Ignoro archivos .pyc y __pycache__
+__pycache__/
+*.pyc
+*.pyo
+**/__pycache__/
+api_conexion.py
+start_prepro.sh
+
+# Binarios / imágenes (no versionar)
+*.jpg
+*.jpeg
+*.png
+*.tiff
+*.tif
+*.svs
+*.ndpi
+*.mrxs
+
+# Scripts de prueba temporales
+test_*.py
+
+# Python
+__pycache__/
+*.pyc
+
+/README.md
+
+# Env prepro / secretos (no subir a GitHub)
+env.prepo.back
+.env.prepo.back
+
+# Deploy local (hosts, usuarios SSH, claves — no subir)
+deploy.local.env
+deploy.local.env.example
+deploy_prepro_local.sh
+
+# Documentación interna (no subir)
+docs/
+
+# Claves SSH para GitHub Actions (nunca commitear)
+.github-actions-keys/
+*.pem
+*_private_key
+*_private_key.pem

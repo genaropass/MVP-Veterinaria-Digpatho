@@ -1,0 +1,87 @@
+{
+    "create_user": [
+        {
+            "section": "HTTP status",
+            "status": "ok",
+            "detail": "status=200"
+        },
+        {
+            "section": "Response match",
+            "status": "ok",
+            "detail": "got={'message': 'Usuario creado con exito'}"
+        }
+    ],
+    "update_email": [
+        {
+            "section": "HTTP status",
+            "status": "ok",
+            "detail": ""
+        },
+        {
+            "section": "Response message",
+            "status": "ok",
+            "detail": {
+                "message": "Mail actualizado correctamente"
+            }
+        }
+    ],
+    "get_id_user": [
+        {
+            "section": "HTTP status",
+            "status": "ok",
+            "detail": ""
+        },
+        {
+            "section": "Response match",
+            "status": "ok",
+            "detail": "got={'message': {'id': '810a7ade-5f7e-4e7d-abca-8bd474bf43d1'}}"
+        }
+    ],
+    "get_user_by_id": [
+        {
+            "section": "HTTP status",
+            "status": "ok",
+            "detail": ""
+        },
+        {
+            "section": "Response match",
+            "status": "ok",
+            "detail": "got={'message': {'id': '810a7ade-5f7e-4e7d-abca-8bd474bf43d1', 'mail': 'user1@example.com'}}"
+        }
+    ],
+    "list_users": [
+        {
+            "section": "HTTP status",
+            "status": "ok",
+            "detail": ""
+        },
+        {
+            "section": "List length",
+            "status": "ok",
+            "detail": [
+                {
+                    "id": "810a7ade-5f7e-4e7d-abca-8bd474bf43d1",
+                    "mail": "user1@example.com"
+                },
+                {
+                    "id": "810a7ade-5f7e-4e7d-abca-8bd474bf12u4",
+                    "mail": "user2@example.com"
+                }
+            ]
+        }
+    ],
+    "delete_user": [
+        {
+            "section": "HTTP status",
+            "status": "ok",
+            "detail": ""
+        },
+        {
+            "section": "Success message",
+            "status": "ok",
+            "detail": {
+                "message": "Usuario eliminado"
+            }
+        }
+    ]
+}

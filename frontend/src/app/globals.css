@@ -1,0 +1,171 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out;
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-indigo-500 to-purple-300;
+  }
+}
+
+@layer base {
+  :root {
+    /* Light theme - Medical interface optimized */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    
+    /* Medical blue primary instead of black */
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
+    
+    /* Medical red for alerts/destructive actions */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    
+    /* Success green for medical contexts */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 98%;
+    
+    /* Warning orange for medical alerts */
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 98%;
+    
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    
+    /* Medical chart colors */
+    --chart-1: 221.2 83.2% 53.3%; /* Medical blue */
+    --chart-2: 142 76% 36%;        /* Success green */
+    --chart-3: 38 92% 50%;         /* Warning orange */
+    --chart-4: 0 84.2% 60.2%;      /* Alert red */
+    --chart-5: 262 83% 58%;        /* Purple accent */
+    
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* Dark theme - Reduced eye strain for medical professionals */
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    
+    /* Softer blue for dark mode */
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 84% 4.9%;
+    
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    
+    /* Adjusted for better visibility in dark mode */
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 98%;
+    --success: 142 69% 45%;
+    --success-foreground: 0 0% 98%;
+    --warning: 38 85% 60%;
+    --warning-foreground: 0 0% 9%;
+    
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 217.2 91.2% 59.8%;
+    
+    /* Dark mode chart colors - better contrast */
+    --chart-1: 217.2 91.2% 59.8%;
+    --chart-2: 142 69% 45%;
+    --chart-3: 38 85% 60%;
+    --chart-4: 0 75% 55%;
+    --chart-5: 262 80% 65%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    /* Remove the Arial font-family since you're using Geist */
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  /* Smooth theme transitions */
+  html {
+    transition: color-scheme 0.2s ease-out;
+  }
+  
+  /* Better focus indicators for accessibility */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}
+
+@layer components {
+  .site-container {
+    @apply max-w-screen-xl mx-auto px-4 md:px-6 lg:px-8;
+  }
+
+  /* Updated button with theme support */
+  .btn {
+    @apply px-6 py-3 text-primary-foreground rounded-lg bg-primary transition-all duration-200 hover:opacity-90 focus:opacity-90 focus:ring-2 focus:ring-ring focus:ring-offset-2;
+  }
+  
+  /* Button variants for medical interface */
+  .btn-secondary {
+    @apply px-6 py-3 text-secondary-foreground rounded-lg bg-secondary transition-all duration-200 hover:opacity-90 focus:opacity-90 focus:ring-2 focus:ring-ring focus:ring-offset-2;
+  }
+  
+  .btn-destructive {
+    @apply px-6 py-3 text-destructive-foreground rounded-lg bg-destructive transition-all duration-200 hover:opacity-90 focus:opacity-90 focus:ring-2 focus:ring-ring focus:ring-offset-2;
+  }
+  
+  .btn-success {
+    @apply px-6 py-3 text-success-foreground rounded-lg bg-success transition-all duration-200 hover:opacity-90 focus:opacity-90 focus:ring-2 focus:ring-ring focus:ring-offset-2;
+  }
+
+  /* Typography with theme support */
+  .heading--1 {
+    @apply text-2xl md:text-3xl lg:text-4xl mb-3 text-foreground font-semibold;
+  }
+  
+  .heading--2 {
+    @apply text-xl md:text-2xl lg:text-3xl mb-2 text-foreground font-semibold;
+  }
+  
+  .heading--3 {
+    @apply text-lg md:text-xl lg:text-2xl mb-2 text-foreground font-medium;
+  }
+}
