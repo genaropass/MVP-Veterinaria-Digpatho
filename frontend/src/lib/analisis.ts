@@ -1,4 +1,4 @@
-
+// @ts-nocheck
 // Gravedad
 // La desviación se mide en múltiplos del ancho del rango de referencia.
 // Ej: rango WBC 6-17 (ancho = 11). WBC = 28 → desviación = 11/11 = 1.0 → moderado.

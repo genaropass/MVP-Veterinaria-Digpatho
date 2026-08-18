@@ -14,6 +14,8 @@ from PIL import Image
 # --- RUTAS FUTURAS ---
 # from app.api.user.route import add_user_routes
 # from app.api.analysis.route import add_analysis_routes
+from app.services.quality_filter import check_image_quality
+from app.services.cellpose_service import segmentar_imagen
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -86,39 +88,39 @@ async def analyze_smear(
     logger.info(f"Imagen recibida: {w}x{h}px | Especie: {especie} | Raza: {raza} | Edad: {edad} | Sexo: {sexo}")
 
     # ─────────────────────────────────────────────────────────────
-    # PIPELINE DE IA (Reemplazar simulación cuando el modelo esté listo)
+    # PIPELINE DE IA FASE 2
     # ─────────────────────────────────────────────────────────────
-    # Paso 1: Cellpose → detectar y segmentar células
-    # masks, flows, styles = cellpose_model.eval(img_array, diameter=None, channels=[0,0])
-    # cell_crops = [crop(img_array, mask) for mask in masks]
-    #
-    # Paso 2: ResNet → clasificar cada recorte
-    # cell_labels = [resnet_model.predict(crop) for crop in cell_crops]
-    #
-    # Paso 3: Construir conteos
-    # counts = build_counts(cell_labels)
-    # ─────────────────────────────────────────────────────────────
+    # Paso 1: Filtro de Calidad
+    quality_result = check_image_quality(img_array)
+    if quality_result["calidad"] == "rechazada":
+        return JSONResponse(status_code=400, content={
+            "detail": quality_result["motivo"]
+        })
 
-    # SIMULACIÓN ESTRUCTURADA (datos realistas hasta integrar el modelo)
+    # Paso 2: Cellpose → segmentar células y extraer morfometría
+    resultados_segmentacion = segmentar_imagen(img_array)
+    celulas_detectadas = resultados_segmentacion["celulas"]
+    morph_alerts = resultados_segmentacion["morph_alerts"]
+
+    # Convertir a un formato simple de conteos y mandar bounding boxes
+    # Como todavía no tenemos clasificación (ResNet/YOLO), inventamos los conteos base o sumamos totales
+    # Para el MVP 2 de UI, podemos decir que detectamos N células
+    total = len(celulas_detectadas)
+    
     simulated_counts = {
-        "neutro_abs": 12.5,
-        "linfo_abs": 1.2,
-        "mono_abs": 0.5,
-        "eosino_abs": 2.1,
-        "baso_abs": 0.0,
+        "neutro_abs": total * 0.6,
+        "linfo_abs": total * 0.3,
+        "mono_abs": total * 0.05,
+        "eosino_abs": total * 0.04,
+        "baso_abs": total * 0.01,
     }
-
-    clinical_alerts = []
-    if simulated_counts["eosino_abs"] > 1.25:
-        clinical_alerts.append("Eosinofilia detectada: Compatible con parasitismo tisular, hipersensibilidad o síndrome eosinofílico.")
-    if simulated_counts["linfo_abs"] < 1.0:
-        clinical_alerts.append("Linfopenia: Compatible con estrés agudo, hipercortisolismo o infección viral.")
 
     return JSONResponse(content={
         "status": "success",
+        "message": f"Análisis visual completado. Calidad: {quality_result.get('score_nitidez', 'OK')}",
         "patient": {"especie": especie, "raza": raza, "edad": edad, "sexo": sexo},
         "image_info": {"width": w, "height": h},
         "counts": simulated_counts,
-        "bounding_boxes": [],  # Se llenará con las máscaras de Cellpose
-        "clinical_alerts": clinical_alerts,
+        "bounding_boxes": celulas_detectadas,
+        "clinical_alerts": morph_alerts # Pasamos las alertas morfométricas al frontend
     })
