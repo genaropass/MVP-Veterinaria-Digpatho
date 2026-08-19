@@ -17,32 +17,13 @@ const nextConfig: NextConfig = {
     ]
   },
   experimental: {
-    middlewareClientMaxBodySize: "50gb",
+    middlewareClientMaxBodySize: "20mb",
     webpackBuildWorker: true,
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
     serverActions: {
-      allowedOrigins: ["app.digpatho.com", "localhost:3000"],
-      bodySizeLimit: "50gb",
+      bodySizeLimit: "20mb",
     },
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    // Avoid failing production builds due Next.js validator.ts path generation
-    // mismatch in this src/app + Linux deploy setup.
-    ignoreBuildErrors: true,
-  },
-
-  // Bloque para redirigir /tiles al backend
-  async rewrites() {
-    return [
-      {
-        source: "/tiles/:path*", 
-        destination: "http://localhost:8000/tiles/:path*",
-      },
-    ];
   },
 };
 

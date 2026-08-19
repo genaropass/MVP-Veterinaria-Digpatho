@@ -4,12 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "prisma generate --no-engine && next build",
+    "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "db:migrate": "npx prisma migrate dev",
-    "db:studio": "npx prisma studio",
-    "db:reset": "prisma migrate reset && prisma migrate dev"
+    "lint": "next lint"
   },
   "prisma": {
     "schema": "src/lib/db/schema.prisma"
