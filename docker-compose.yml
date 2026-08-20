@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - ALLOWED_ORIGINS=http://localhost:3000
+      - TRUSTED_HOSTS=127.0.0.1,backend
+    volumes:
+      - ./backend/models:/app/models # Para cachear Cellpose models
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000/
+      - AUTH_SECRET=digpatho_veterinaria_secret_key_mock
+      - API_TOKEN=mock_token_123
+    depends_on:
+      - backend
