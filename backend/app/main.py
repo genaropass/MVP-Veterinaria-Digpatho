@@ -2,7 +2,7 @@ import logging
 import os
 import io
 import numpy as np
-from fastapi import FastAPI, File, UploadFile, Form, HTTPException
+from fastapi import FastAPI, File, UploadFile, Form, HTTPException, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from slowapi.errors import RateLimitExceeded
@@ -10,10 +10,8 @@ from slowapi.middleware import SlowAPIMiddleware
 from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 from app.core.limiter import limiter
 from PIL import Image
+import imghdr
 
-# --- RUTAS FUTURAS ---
-# from app.api.user.route import add_user_routes
-# from app.api.analysis.route import add_analysis_routes
 from app.services.quality_filter import check_image_quality
 from app.services.cellpose_service import segmentar_imagen
 
@@ -32,7 +30,10 @@ app = FastAPI(
 
 app.state.limiter = limiter
 app.add_middleware(SlowAPIMiddleware)
-app.add_middleware(ProxyHeadersMiddleware, trusted_hosts=["127.0.0.1"])
+
+TRUSTED_HOSTS = os.getenv("TRUSTED_HOSTS", "127.0.0.1").split(",")
+app.add_middleware(ProxyHeadersMiddleware, trusted_hosts=TRUSTED_HOSTS)
+
 app.add_exception_handler(
     RateLimitExceeded,
     lambda request, exc: JSONResponse(
@@ -41,9 +42,10 @@ app.add_exception_handler(
     ),
 )
 
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -57,11 +59,19 @@ def read_root():
 
 @app.get("/health", tags=["Sistema"])
 def health_check():
+    # Verify model is available
+    from app.services.cellpose_service import CELLPOSE_AVAILABLE
+    if not CELLPOSE_AVAILABLE:
+        return JSONResponse(status_code=503, content={"status": "unhealthy", "detail": "Cellpose no disponible"})
     return {"status": "healthy"}
 
 
+MAX_FILE_SIZE = 20 * 1024 * 1024  # 20 MB
+
 @app.post("/api/v1/analyze-smear", tags=["Análisis"])
+@limiter.limit("5/minute")
 async def analyze_smear(
+    request: Request,
     file: UploadFile = File(..., description="Imagen de frotis (JPG/PNG)"),
     especie: str = Form(default="Canino"),
     raza: str = Form(default=""),
@@ -73,11 +83,18 @@ async def analyze_smear(
     Procesa con Cellpose (segmentación) + ResNet (clasificación).
     Devuelve conteos celulares y alertas clínicas.
     """
-    # Validar que es una imagen
-    if not file.content_type.startswith("image/"):
+    if not file.content_type or not file.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="El archivo debe ser una imagen (JPG/PNG).")
 
     image_bytes = await file.read()
+    
+    if len(image_bytes) > MAX_FILE_SIZE:
+        raise HTTPException(status_code=413, detail="El archivo excede el tamaño máximo permitido de 20MB.")
+        
+    image_type = imghdr.what(None, image_bytes)
+    if image_type not in ["jpeg", "png"]:
+        raise HTTPException(status_code=400, detail="Formato de imagen inválido. Solo se permite JPG o PNG.")
+
     try:
         image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
     except Exception:

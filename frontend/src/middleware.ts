@@ -6,9 +6,7 @@ import { NextResponse, type NextRequest } from "next/server";
  * Exporta la función `auth` como middleware para la autenticación.
  */
 export async function middleware(req: NextRequest) {
-  if (req.nextUrl.pathname.startsWith("/api/wsi/tiles-v2")) {
-    return NextResponse.next();
-  }
+  // No special public routes needed for MVP
   const session = await auth();
 
   if (!session || !session.user) {
@@ -28,5 +26,5 @@ export async function middleware(req: NextRequest) {
  * 
  */
 export const config = {
-  matcher: ["/profile/:path*", "/settings", "/wsi", "/bots", "/api/wsi/:path*"],
+  matcher: ["/dashboard/:path*"],
 };

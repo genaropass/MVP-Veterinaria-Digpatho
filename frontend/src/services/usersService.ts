@@ -59,22 +59,18 @@ export async function registerUser(
 }
 
 export async function loginUser(email: string, password: string): Promise<LoginResponse | null> {
-  console.log("host: ", HOST)
-  console.log("process.env.NEXT_PUBLIC_API_URL: ", process.env.NEXT_PUBLIC_API_URL)
-  const response = await fetch(`${HOST}users_login/`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${API_TOKEN}`,
-    },
-    body: JSON.stringify({ mail: email, password }),
-  });
-
-  if (!response.ok) {
-    return null; 
+  // Mock login for MVP until Cloud SQL is connected
+  if (email && password) {
+    // Generate a simple mock JWT (header.payload.signature)
+    const mockPayload = Buffer.from(JSON.stringify({ sub: "veterinario1", email })).toString('base64');
+    const mockToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.${mockPayload}.mocksignature`;
+    
+    return {
+      access_token: mockToken,
+      token_type: "bearer"
+    };
   }
-
-  return await response.json();
+  return null;
 }
 
 /*Obtiene el ID del usuario a partir del email*/
@@ -92,15 +88,9 @@ export async function fetchUserIdByEmail(email: string): Promise<string> {
   return await response.json(); 
 }
 
-/*Verifica si un usuario existe por email (retorna true/false)*/
 export async function userExists(email: string): Promise<boolean> {
-  const response = await fetch(`${HOST}users/${email}`, {
-    headers: {
-      Authorization: `Bearer ${API_TOKEN}`,
-    },
-  });
-
-  return response.status === 200;
+  // Mock for MVP
+  return true;
 }
 
 export async function validate2FACode(email: string, token: string): Promise<void> {
