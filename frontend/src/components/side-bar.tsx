@@ -64,20 +64,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, toggleSidebar }) => {
 
   const menuItems = [
     {
-      href: "/profile",
-      label: t("profile"),
+      href: "/dashboard",
+      label: "Dashboard",
       icon: Squares2X2Icon,
-    },
-    {
-      href: "/bots",
-      label: t("bots"),
-      icon: SparklesIcon,
-    },
-    {
-      href: "/settings",
-      label: t("settings"),
-      icon: Cog6ToothIcon,
-    },
+    }
   ];
 
   const isActiveRoute = (href: string) => pathname === href;

@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { APP_URL } from "@/utils/constants";
 
-const PROTECTED_PATHS = ["/profile", "/settings", "/wsi"];
+const PROTECTED_PATHS = ["/dashboard"];
 
 export function SessionExpiryGuard() {
   const { status } = useSession();

@@ -41,7 +41,7 @@ function SignInForm() {
       }
     } else {
       console.log("res error: ")
-      router.push("/profile");
+      router.push("/dashboard");
     }
 
     setIsLoading(false);

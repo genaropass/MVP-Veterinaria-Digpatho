@@ -32,7 +32,7 @@ function ValidateEmail() {
       await validate2FACode(email, token);
       router.refresh();
       router.push("/auth/sign-in"); 
-      //router.push("/profile");
+      //router.push("/dashboard");
     } catch (err) {
       setError(t("error-server"));
     } finally {

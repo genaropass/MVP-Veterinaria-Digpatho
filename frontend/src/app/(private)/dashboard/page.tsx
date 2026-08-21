@@ -318,8 +318,16 @@ export default function Dashboard() {
               {iaResults?.counts && (
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 space-y-6">
                   <div className="flex items-center justify-between">
-                    <h2 className="text-lg font-semibold text-purple-700 dark:text-purple-400">Resultados Visuales (Simulados)</h2>
+                    <h2 className="text-lg font-semibold text-purple-700 dark:text-purple-400">Resultados Visuales</h2>
                     <span className="text-xs text-gray-400">{iaResults.image_info?.width}×{iaResults.image_info?.height}px</span>
+                  </div>
+
+                  <div className="flex items-start gap-3 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 text-yellow-800 dark:text-yellow-300 rounded-xl">
+                    <AlertTriangle className="w-5 h-5 mt-0.5 shrink-0" />
+                    <div>
+                      <p className="font-semibold text-sm">Aviso Importante (Datos Simulados)</p>
+                      <p className="text-sm mt-1">Los recuentos celulares absolutos mostrados a continuación son **valores simulados** para la versión de demostración del MVP, basados en el número de células segmentadas. No deben utilizarse para diagnóstico clínico real hasta que se integre el modelo de clasificación definitivo.</p>
+                    </div>
                   </div>
 
                   {preview && iaResults.bounding_boxes && iaResults.image_info && (

@@ -13,7 +13,7 @@ interface PageProps {
 
 const Page = async ({ searchParams }: PageProps) => {
   const session = await getCachedSession();
-  if (session) redirect("/profile");
+  if (session) redirect("/dashboard");
   const params = await searchParams;
   const error = params?.error;
   const reason = params?.reason;

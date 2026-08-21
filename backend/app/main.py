@@ -10,7 +10,6 @@ from slowapi.middleware import SlowAPIMiddleware
 from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 from app.core.limiter import limiter
 from PIL import Image
-import imghdr
 
 from app.services.quality_filter import check_image_quality
 from app.services.cellpose_service import segmentar_imagen
@@ -91,12 +90,12 @@ async def analyze_smear(
     if len(image_bytes) > MAX_FILE_SIZE:
         raise HTTPException(status_code=413, detail="El archivo excede el tamaño máximo permitido de 20MB.")
         
-    image_type = imghdr.what(None, image_bytes)
-    if image_type not in ["jpeg", "png"]:
-        raise HTTPException(status_code=400, detail="Formato de imagen inválido. Solo se permite JPG o PNG.")
-
     try:
-        image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+        image = Image.open(io.BytesIO(image_bytes))
+        image_format = image.format.lower() if image.format else ""
+        if image_format not in ["jpeg", "png", "jpg"]:
+            raise ValueError("Invalid format")
+        image = image.convert("RGB")
     except Exception:
         raise HTTPException(status_code=400, detail="No se pudo leer la imagen. Asegurate de subir un JPG o PNG válido.")
 
